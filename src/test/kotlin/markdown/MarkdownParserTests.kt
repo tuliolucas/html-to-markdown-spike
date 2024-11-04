@@ -1,5 +1,8 @@
 package markdown
 
+import com.vladsch.flexmark.html2md.converter.FlexmarkHtmlConverter
+import com.vladsch.flexmark.util.data.MutableDataSet
+import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
@@ -150,5 +153,21 @@ class MarkdownParserTests {
             
         """.trimIndent()
         assertEquals(expectedMarkdown, parser.parseHtmlToMarkdown(html))
+    }
+
+    @Test
+    fun `should retain emojis in HTML to Markdown conversion`() {
+        val htmlText = """
+            <p>Hello 😊! Welcome to our test 🌐. Let's make it awesome 🚀!</p>
+        """.trimIndent()
+
+
+        val markdown = parser.parseHtmlToMarkdown(htmlText).trim()
+
+        val expectedMarkdown = """
+            Hello 😊! Welcome to our test 🌐. Let's make it awesome 🚀!
+        """.trimIndent()
+
+        Assertions.assertEquals(expectedMarkdown, markdown)
     }
 }
